@@ -27,19 +27,22 @@ export class UsersService {
     
     addUser = name => {
         users.push(new NewUser(name, users.length + 1));
+        return JSON.stringify(users);
     }
 
     updateUser = (name, id) => {
         users[id - 1].name = name;
+        return JSON.stringify(users);
     }
 
-    deleteUSer = id => {
+    deleteUser = id => {
         users.splice(id - 1, 1);
         users.forEach((el, i) => {
             if (id - 1 === i) {
                 el.id = i + 1;
             }
         })
+        return JSON.stringify(users);
     }
 }
 

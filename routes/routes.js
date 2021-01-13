@@ -3,9 +3,11 @@ export const router = express.Router();
 
 import {UsersController} from '../controllers/controller.js';
 
+const controller = new UsersController();
+
 router
-    .get('/', UsersController.get)
-    .post('/', UsersController.add)
-    .put('/:id', UsersController.update)
-    .delete('/:id', UsersController.delete);
+    .get('/', controller.get)
+    .post('/', controller.add)
+    .put('/:id', controller.update)
+    .delete('/:id', controller.delete);
 
