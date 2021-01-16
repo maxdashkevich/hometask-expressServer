@@ -1,3 +1,4 @@
+import fs from 'fs';
 export class NewUser {
     constructor(name, id) {
         this.name = name;
@@ -8,15 +9,15 @@ export class NewUser {
 export const users = [
     {
         name: 'Maksim',
-        id: 1
+        id: Date.now() + ( (Math.random()*100000).toFixed())
     },
     {
         name: 'Ruslan',
-        id: 2
+        id: Date.now() + ( (Math.random()*100000).toFixed())
     },
     {
         name: 'Anton',
-        id: 3
+        id: Date.now() + ( (Math.random()*100000).toFixed())
     }
 ];
 
@@ -26,22 +27,24 @@ export class UsersService {
     }
     
     addUser = name => {
-        users.push(new NewUser(name, users.length + 1));
+        users.push(new NewUser(name, Date.now() + ( (Math.random()*100000).toFixed())));
         return JSON.stringify(users);
     }
 
     updateUser = (name, id) => {
-        users[id - 1].name = name;
+        for (let user of users) {
+            if (user.id === id) {
+                user.name = name;
+            }
+        }
         return JSON.stringify(users);
     }
 
     deleteUser = id => {
-        users.splice(id - 1, 1);
-        users.forEach((el, i) => {
-            if (id - 1 === i) {
-                el.id = i + 1;
-            }
-        })
+        const index = users.findIndex(n => n.id === id);
+        if (index !== -1) {
+            users.splice(index, 1);
+        }   
         return JSON.stringify(users);
     }
 }
