@@ -21,6 +21,8 @@ export const users = [
     }
 ];
 
+fs.writeFile("data.json", JSON.stringify(users), () => {});
+
 export class UsersService {
     getUsers = () => {
         return JSON.stringify(users);
@@ -28,6 +30,7 @@ export class UsersService {
     
     addUser = name => {
         users.push(new NewUser(name, Date.now() + ( (Math.random()*100000).toFixed())));
+        fs.writeFile("data.json", JSON.stringify(users), () => {});
         return JSON.stringify(users);
     }
 
@@ -37,15 +40,17 @@ export class UsersService {
                 user.name = name;
             }
         }
+        fs.writeFile("data.json", JSON.stringify(users), () => {});
         return JSON.stringify(users);
     }
 
     deleteUser = id => {
         const index = users.findIndex(n => n.id === id);
+        
         if (index !== -1) {
             users.splice(index, 1);
-        }   
+        }
+        fs.writeFile("data.json", JSON.stringify(users), () => {});
         return JSON.stringify(users);
     }
 }
-
