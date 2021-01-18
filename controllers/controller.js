@@ -7,7 +7,7 @@ export class UsersController {
     }
 
     add = (req, res) => {
-        res.status(200).send(service.addUser(req.body.name));
+        res.status(200).send(service.addUser(req.body));
     }
 
     update = (req, res) => {
@@ -16,6 +16,10 @@ export class UsersController {
 
     delete = (req, res) => {
         res.status(200).send(service.deleteUser(req.params.id));
+    }
+
+    login = (req, res) => {
+        res.status(200).send(service.login(req.body.login, req.body.password))
     }
 }
 

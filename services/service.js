@@ -1,23 +1,37 @@
 import fs from 'fs';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 export class NewUser {
-    constructor(name, id) {
+    constructor(name, id, role, login, password) {
         this.name = name;
         this.id = id;
+        this.role = role;
+        this.login = login;
+        this.password = password;
     }
 }
 
 export const users = [
     {
         name: 'Maksim',
-        id: Date.now() + ( (Math.random()*100000).toFixed())
+        id: Date.now() + ( (Math.random()*100000).toFixed()),
+        role: 'admin',
+        login: 'maxdashkevich',
+        password: bcrypt.hashSync('qwertyuiop', bcrypt.genSaltSync(10))
     },
     {
         name: 'Ruslan',
-        id: Date.now() + ( (Math.random()*100000).toFixed())
+        id: Date.now() + ( (Math.random()*100000).toFixed()),
+        role: 'user',
+        login: 'Ruslan123',
+        password: bcrypt.hashSync('ruslan2021', bcrypt.genSaltSync(10))
     },
     {
         name: 'Anton',
-        id: Date.now() + ( (Math.random()*100000).toFixed())
+        id: Date.now() + ( (Math.random()*100000).toFixed()), 
+        role: 'user',
+        login: 'prostoAnton',
+        password: bcrypt.hashSync('antonanton', bcrypt.genSaltSync(10))
     }
 ];
 
@@ -28,8 +42,10 @@ export class UsersService {
         return JSON.stringify(users);
     }
     
-    addUser = name => {
-        users.push(new NewUser(name, Date.now() + ( (Math.random()*100000).toFixed())));
+    addUser = ({name, role, login, password}) => {
+        if (users.findIndex(el => el.login === login) !== -1) return 'This login is already taken';
+        
+        users.push(new NewUser(name, Date.now() + ( (Math.random()*100000).toFixed()), role, login, this.hashPassword(password)));
         fs.writeFile("data.json", JSON.stringify(users), () => {});
         return JSON.stringify(users);
     }
@@ -45,12 +61,32 @@ export class UsersService {
     }
 
     deleteUser = id => {
-        const index = users.findIndex(n => n.id === id);
+        const index = users.findIndex(el => el.id === id);
         
         if (index !== -1) {
             users.splice(index, 1);
         }
         fs.writeFile("data.json", JSON.stringify(users), () => {});
         return JSON.stringify(users);
+    }
+
+    hashPassword = password => {
+        const saltRounds = 10;
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hash = bcrypt.hashSync(password, salt);
+        
+        return hash;
+    }
+
+    login = (login, password) => {
+        const index = users.findIndex(el => el.login === login);
+        const user = users[index];
+
+        if (index === -1) return 'Incorrect login';
+        if (bcrypt.compareSync(password, this.hashPassword(password))) {
+            user.token = jwt.sign(user.login.toString(), 'secret');
+        } else throw new Error('Incorrect password!');
+
+        return user;
     }
 }
