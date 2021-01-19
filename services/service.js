@@ -51,11 +51,7 @@ export class UsersService {
     }
 
     updateUser = (name, id) => {
-        for (let user of users) {
-            if (user.id === id) {
-                user.name = name;
-            }
-        }
+        users[users.findIndex(el => el.id === id)].name = name;
         fs.writeFile("data.json", JSON.stringify(users), () => {});
         return JSON.stringify(users);
     }
