@@ -1,7 +1,54 @@
-import fs from 'fs';
+// import fs from 'fs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-export class NewUser {
+import {Users} from '../models/users-model.js';
+
+export class UsersService {
+    getUsers = async () => {
+        return Users.findAll({raw: true});
+    }
+
+    addUser = async ({...body}) => {
+        return Users.create({
+            name: body.name,
+            role: body.role,
+            login: body.login,
+            password: body.password
+        });
+    }
+
+    updateUser = async (body, id) => {
+        return Users.update({...body}, {
+            where: {
+                id: id
+            }
+        });
+    }
+
+    deleteUser = async (id) => {
+        return Users.destroy({
+            where: {
+                id: id
+            }
+        });
+    }
+
+    login = async (login, password) => {
+        const user = await Users.findOne({
+            where: {
+                login: login
+            },
+            raw: true
+        });
+
+        if (bcrypt.compareSync(password, user.password)) {
+            const token = jwt.sign(user.login.toString(), 'secret');
+            console.log('Your authorization token: ', token);
+            return ({user, token});
+        } else throw new Error('Incorrect password!');
+    }
+}
+/* export class NewUser {
     constructor(name, id, role, login, password) {
         this.name = name;
         this.id = id;
@@ -85,4 +132,4 @@ export class UsersService {
 
         return user;
     }
-}
+} */

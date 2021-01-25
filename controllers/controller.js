@@ -1,17 +1,18 @@
-import {UsersService, users, NewUser} from '../services/service.js';
+import {UsersService} from '../services/service.js';
 
 const service = new UsersService();
 export class UsersController {
     get = (req, res) => {
-        res.status(200).send(service.getUsers());
+        res.status(200);
+        service.getUsers().then(result => res.send(result));
     }
 
     add = (req, res) => {
-        res.status(200).send(service.addUser(req.body));
+        res.status(200).send(service.addUser(req.body.name));
     }
 
     update = (req, res) => {
-        res.status(200).send(service.updateUser(req.body.name, req.params.id));
+        res.status(200).send(service.updateUser(req.body, req.params.id));
     }
 
     delete = (req, res) => {

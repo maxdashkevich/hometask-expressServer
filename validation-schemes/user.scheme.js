@@ -12,7 +12,7 @@ export const createUserSchema = Joi.object({
         .alphanum(),
 
     login: Joi.string()
-        .pattern(new RegExp('^[a-zA-Z0-9_]{5,20}[a-zA-Z]+$'))
+        .pattern(new RegExp('^[a-zA-Z0-9_]{5,20}$'))
         .required(),
 
     password: Joi.string()

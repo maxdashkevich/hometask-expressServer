@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
-import {users} from '../services/service.js';
+import {Users} from '../models/users-model.js'
 
-export const auth = (role) => (req, res, next) => {
+export const auth = (role) => async (req, res, next) => {
     try {
         const [strategy, token] = req.header('Authorization').split(' ');
         const login = jwt.verify(token, 'secret');;
-        const index = users.findIndex(el => el.login === login);
+        const user = await Users.findByPk(req.params.id);
 
-        if (users[index].role !== role || index === -1) throw new Error('Incorrect role or invalid token');
+        if (user.role !== role || !user || login !== user.login) throw new Error('Incorrect role or invalid token')
 
         next();
     } catch (e) {
