@@ -8,7 +8,7 @@ export class UsersController {
     }
 
     add = (req, res) => {
-        res.status(200).send(service.addUser(req.body.name));
+        res.status(200).send(service.addUser(req.body));
     }
 
     update = (req, res) => {
@@ -20,7 +20,16 @@ export class UsersController {
     }
 
     login = (req, res) => {
-        res.status(200).send(service.login(req.body.login, req.body.password))
+        res.status(200).send(service.login(req.body.login, req.body.password));
+    }
+
+    addAvatar = async (req, res) => {
+        res.status(200).send(await service.addAvatar(req.file.path, req.params.id));
+        console.log(req.file);
+    }
+
+    getAvatar = async (req, res) => {
+        res.status(200).header({'Content-Type': 'image/jpeg'}).sendFile(await service.getAvatar(req.params.id));
     }
 }
 

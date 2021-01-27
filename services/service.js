@@ -2,6 +2,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {Users} from '../models/users-model.js';
+import {__dirname} from '../app.js'
 
 export class UsersService {
     getUsers = async () => {
@@ -18,7 +19,7 @@ export class UsersService {
     }
 
     updateUser = async (body, id) => {
-        return Users.update({...body}, {
+        return Users.update({name: body.name}, {
             where: {
                 id: id
             }
@@ -46,6 +47,24 @@ export class UsersService {
             console.log('Your authorization token: ', token);
             return ({user, token});
         } else throw new Error('Incorrect password!');
+    }
+
+    addAvatar = async (path, id) => {
+        return Users.update({avatar: path}, {
+            where: {
+                id: id
+            }
+        });
+    }
+
+    getAvatar = async (id) => {
+        const userAvatar = await Users.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        return (__dirname + '/' + userAvatar.avatar);     
     }
 }
 /* export class NewUser {

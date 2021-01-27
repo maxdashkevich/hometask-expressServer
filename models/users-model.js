@@ -1,6 +1,6 @@
 import pkg from 'sequelize';
 const {Sequelize, Model} = pkg;
-// import {Sequelize, Model} from 'sequelize';
+
 import {sequelize} from '../services/db-connection.js';
 import bcrypt from 'bcrypt';
 
@@ -30,6 +30,9 @@ Users.init({
         set(value) {
             this.setDataValue('password', bcrypt.hashSync(value, bcrypt.genSaltSync(10)));
         }
+    },
+    avatar: {
+        type: Sequelize.STRING
     }
 }, {
     sequelize,
