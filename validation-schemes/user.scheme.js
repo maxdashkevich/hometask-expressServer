@@ -5,11 +5,8 @@ export const createUserSchema = Joi.object({
         .pattern(new RegExp('^[a-zA-Z]{2,30}$'))
         .required(),
 
-    id: Joi.number()
-        .max(30),
-
-    role: Joi.string()
-        .alphanum(),
+    role: Joi.string().valid('admin', 'user')
+    .required(),
 
     login: Joi.string()
         .pattern(new RegExp('^[a-zA-Z0-9_]{5,20}$'))
@@ -22,6 +19,10 @@ export const createUserSchema = Joi.object({
 
 export const updateUserSchema = Joi.object({
     name: Joi.string()
-        .pattern(new RegExp('^[a-zA-Z]{2,30}$'))
-        .required()
+        .pattern(new RegExp('^[a-zA-Z]{2,30}$')),
+
+    role: Joi.string().valid('admin', 'user'),
+
+    password: Joi.string()
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))    
 });

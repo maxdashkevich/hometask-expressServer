@@ -7,12 +7,17 @@ export class UsersController {
         service.getUsers().then(result => res.send(result));
     }
 
+    getUser = (req, res) => {
+        res.status(200);
+        service.getUser(req.params.id).then(result => res.send(result));
+    }
+
     add = (req, res) => {
         res.status(200).send(service.addUser(req.body));
     }
 
     update = (req, res) => {
-        res.status(200).send(service.updateUser(req.body, req.params.id));
+        res.status(200).send(service.updateUser(req.params.id, req.body));
     }
 
     delete = (req, res) => {
@@ -26,10 +31,6 @@ export class UsersController {
     addAvatar = async (req, res) => {
         res.status(200).send(await service.addAvatar(req.file.path, req.params.id));
         console.log(req.file);
-    }
-
-    getAvatar = async (req, res) => {
-        res.status(200).header({'Content-Type': 'image/jpeg'}).sendFile(await service.getAvatar(req.params.id));
     }
 }
 

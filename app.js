@@ -15,7 +15,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use('/:id/avatar', express.static('public'));
+app.use('/public', express.static('public'));
 
 app.use('/', info, router);
 

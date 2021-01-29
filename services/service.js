@@ -9,19 +9,24 @@ export class UsersService {
         return Users.findAll({raw: true});
     }
 
-    addUser = async ({...body}) => {
-        return Users.create({
-            name: body.name,
-            role: body.role,
-            login: body.login,
-            password: body.password
+    getUser = async (id) => {
+        return Users.findOne({
+            where: {
+                id
+            }
         });
     }
 
-    updateUser = async (body, id) => {
-        return Users.update({name: body.name}, {
+    addUser = async ({body}) => {
+        return Users.create({
+            ...body
+        });
+    }
+
+    updateUser = async (id, body) => {
+        return Users.update({...body}, {
             where: {
-                id: id
+                id
             }
         });
     }
@@ -29,7 +34,7 @@ export class UsersService {
     deleteUser = async (id) => {
         return Users.destroy({
             where: {
-                id: id
+                id
             }
         });
     }
@@ -37,7 +42,7 @@ export class UsersService {
     login = async (login, password) => {
         const user = await Users.findOne({
             where: {
-                login: login
+                login
             },
             raw: true
         });
@@ -52,19 +57,9 @@ export class UsersService {
     addAvatar = async (path, id) => {
         return Users.update({avatar: path}, {
             where: {
-                id: id
+                id
             }
         });
-    }
-
-    getAvatar = async (id) => {
-        const userAvatar = await Users.findOne({
-            where: {
-                id: id
-            }
-        });
-
-        return (__dirname + '/' + userAvatar.avatar);     
     }
 }
 /* export class NewUser {

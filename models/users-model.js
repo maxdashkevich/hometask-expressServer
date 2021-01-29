@@ -1,8 +1,8 @@
 import pkg from 'sequelize';
-const {Sequelize, Model} = pkg;
-
 import {sequelize} from '../services/db-connection.js';
 import bcrypt from 'bcrypt';
+
+const {Sequelize, Model} = pkg;
 
 export class Users extends Model {};
 Users.init({
